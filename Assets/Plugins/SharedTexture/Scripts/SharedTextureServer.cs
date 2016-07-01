@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof(Camera))]
-public class SyphonSpoutServer : MonoBehaviour {
+public class SharedTextureServer : MonoBehaviour {
 
 	/*
 	 * This class creates the appropriate component for texture sharing according 
@@ -316,7 +316,7 @@ public class SyphonSpoutServer : MonoBehaviour {
 		DontDestroyOnLoad(spoutCamera);
 
 		// Remove useless cloned components
-		Destroy(spoutCamera.GetComponent<SyphonSpoutServer>());
+		Destroy(spoutCamera.GetComponent<SharedTextureServer>());
 		Destroy(spoutCamera.GetComponent<AudioListener>());
 		Destroy(spoutCamera.GetComponent<GUILayer>());
 
@@ -373,19 +373,23 @@ public class SyphonSpoutServer : MonoBehaviour {
 	#endif
 
 	void SaveSettings(){
-		PlayerPrefs.SetInt ("renderWidth", renderWidth);
-		PlayerPrefs.SetInt ("renderHeight", renderHeight);
-		PlayerPrefs.SetInt ("autoResolution", autoResolution?1:0);
-		PlayerPrefs.SetInt ("lastManualRenderWidth", lastManualRenderWidth);
-		PlayerPrefs.SetInt ("lastManualRenderHeight", lastManualRenderHeight);
+		string prefix = gameObject.name + GetType ().ToString ();
+
+		PlayerPrefs.SetInt (prefix+"renderWidth", renderWidth);
+		PlayerPrefs.SetInt (prefix+"renderHeight", renderHeight);
+		PlayerPrefs.SetInt (prefix+"autoResolution", autoResolution?1:0);
+		PlayerPrefs.SetInt (prefix+"lastManualRenderWidth", lastManualRenderWidth);
+		PlayerPrefs.SetInt (prefix+"lastManualRenderHeight", lastManualRenderHeight);
 	}
 
 	void LoadSettings(){
-		renderWidth = PlayerPrefs.GetInt ("renderWidth", renderWidth);
-		renderHeight = PlayerPrefs.GetInt("renderHeight", renderHeight);
-		autoResolution = PlayerPrefs.GetInt ("autoResolution", autoResolution?1:0) == 1 ? true : false;
-		lastManualRenderWidth = PlayerPrefs.GetInt ("lastManualRenderWidth", lastManualRenderWidth);
-		lastManualRenderHeight = PlayerPrefs.GetInt ("lastManualRenderHeight", lastManualRenderHeight);
+		string prefix = gameObject.name + GetType ().ToString ();
+
+		renderWidth = PlayerPrefs.GetInt (prefix+"renderWidth", renderWidth);
+		renderHeight = PlayerPrefs.GetInt(prefix+"renderHeight", renderHeight);
+		autoResolution = PlayerPrefs.GetInt (prefix+"autoResolution", autoResolution?1:0) == 1 ? true : false;
+		lastManualRenderWidth = PlayerPrefs.GetInt (prefix+"lastManualRenderWidth", lastManualRenderWidth);
+		lastManualRenderHeight = PlayerPrefs.GetInt (prefix+"lastManualRenderHeight", lastManualRenderHeight);
 	}
 
 	void OnApplicationQuit(){
