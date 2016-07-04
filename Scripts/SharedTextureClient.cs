@@ -3,8 +3,12 @@ using System.Collections;
 
 public class SharedTextureClient : MonoBehaviour {
 
-	/// The name of the sender.
-	[Tooltip("The name of the sender.")]
+	/// The name of the application sender.
+	[Tooltip("The name of the application sending data.")]
+	public string senderAppName = "";
+
+	/// The name of the server defined in the app defined in senderAppName.
+	[Tooltip("The name of the server defined in the app defined in senderAppName.")]
 	public string senderName = "";
 
 	/// The materials to apply texture shared.
@@ -52,7 +56,20 @@ public class SharedTextureClient : MonoBehaviour {
 
 	#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 	void SetupSyphonClient(){
-		// TODO
+		// Instantiate client
+		gameObject.AddComponent<Syphon>();
+		SyphonClientTexture client = gameObject.AddComponent<SyphonClientTexture>();
+		// Init receiver
+		client.clientAppName = senderAppName;
+		client.clientName = senderName;
+
+		// Apply shared texture
+		// Add a mesh renderer because syphon take materials on this mesh renderer
+	/*	MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer> ();
+		meshRenderer.materials = new Material[targetMaterials.Length];
+		for (int i=0; i<targetMaterials.Length; i++) {
+			meshRenderer.materials[i] = targetMaterials[i];
+		}*/
 	}
 
 	#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -64,7 +81,7 @@ public class SharedTextureClient : MonoBehaviour {
 		if (senderName == "") {
 			client.sharingName = "Any";
 		} else {
-			client.sharingName = senderName;
+			client.sharingName = senderAppName + " - " + senderName;
 		}
 
 		// Apply shared texture 
