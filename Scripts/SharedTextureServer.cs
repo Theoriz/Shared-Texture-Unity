@@ -25,6 +25,11 @@ public class SharedTextureServer : MonoBehaviour {
 	private int lastManualRenderHeight;
 	private bool wasAutoResolution;	// auResolution bool state on last frame
 
+	/// Boolean indicating if the graphic server has already been setup
+	private bool isSetup = false;
+	/// Boolean indicating if the graphic server has been initialized
+	private bool isInitialized = false;
+
 	#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 	private enum GraphicServer{
 	SYPHON,
@@ -42,6 +47,7 @@ public class SharedTextureServer : MonoBehaviour {
 		renderHeight = 1080;
 		lastManualRenderWidth = renderWidth;
 		lastManualRenderHeight = renderHeight;
+		isSetup = false;
 	}
 
 	void Start () {
@@ -57,6 +63,9 @@ public class SharedTextureServer : MonoBehaviour {
 		oldRenderWidth = renderWidth;
 		oldRenderHeight = renderHeight;
 		aspectRatio = (float)lastManualRenderWidth/(float)lastManualRenderHeight;
+
+		// The graphic server can now be set up
+		isInitialized = true;
 
 		// Init Syphon or Spout server
 		SetupGraphicServer ();
@@ -117,7 +126,13 @@ public class SharedTextureServer : MonoBehaviour {
 		wasAutoResolution = autoResolution;
 	}
 
+	void OnEnable(){
+		SetupGraphicServer ();
+	}
 
+	void OnDisable(){
+		DestroyGraphicServer ();
+	}
 
 	IEnumerator UpdateRender () {
 		// If aspect ratio locked
@@ -176,27 +191,52 @@ public class SharedTextureServer : MonoBehaviour {
 	}
 
 	void SetupGraphicServer(){
+		if (!isSetup && isInitialized) {
+			#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+
+			// Check current Unity version
+			// < 5.3
+			if(float.Parse( Application.version.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
+			// Use Syphon (because have some issues on version >5.2 when writing this code)
+			graphicServer = GraphicServer.SYPHON;
+			}
+			// >= 5.3
+			else{
+			// Use funnel, compatible with 5.3+ and latest OpenGL backend
+			graphicServer = GraphicServer.FUNNEL;
+			}
+
+			switch(graphicServer){
+			case GraphicServer.SYPHON:
+			SetupSyphonServer();
+			break;
+
+			case GraphicServer.FUNNEL:
+			SetupFunnelServer();
+			break;
+
+			default:
+			break;
+			}
+
+			#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+
+			SetupSpoutServer ();
+			#endif
+
+			isSetup = true;
+		}
+	}
+
+	void DestroyGraphicServer(){
 		#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-
-		// Check current Unity version
-		// < 5.3
-		if(float.Parse( Application.version.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
-		// Use Syphon (because have some issues on version >5.2 when writing this code)
-		graphicServer = GraphicServer.SYPHON;
-		}
-		// >= 5.3
-		else{
-		// Use funnel, compatible with 5.3+ and latest OpenGL backend
-		graphicServer = GraphicServer.FUNNEL;
-		}
-
 		switch(graphicServer){
 		case GraphicServer.SYPHON:
-		SetupSyphonServer();
+		//DestroySyphonServer();
 		break;
 
 		case GraphicServer.FUNNEL:
-		SetupFunnelServer();
+		//DestroyFunnelServer();
 		break;
 
 		default:
@@ -205,8 +245,10 @@ public class SharedTextureServer : MonoBehaviour {
 
 		#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 
-		SetupSpoutServer();
+		DestroySpoutServer();
 		#endif
+
+		isSetup = false;
 	}
 
 	void ResizeRenderTexture(){
@@ -369,6 +411,23 @@ public class SharedTextureServer : MonoBehaviour {
 
 		// Enable spout sender
 		spoutSender.enabled = true;
+	}
+
+	void DestroySpoutServer(){
+		// Find the gameobject hosting the spout camera
+		GameObject spoutChild = null;
+		foreach (Transform child in gameObject.transform) {
+			if(child.CompareTag("SpoutCamera")){
+				spoutChild = child.gameObject;
+				break;
+			}
+		}
+
+		// Destroy it
+		Destroy(spoutChild);
+
+		// Then destroy spout component
+		Destroy (gameObject.GetComponent<Spout.Spout> ());
 	}
 	#endif
 
