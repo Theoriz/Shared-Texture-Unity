@@ -387,17 +387,18 @@ public class SharedTextureServer : MonoBehaviour {
 
 		// Add spout components 
 		gameObject.AddComponent<Spout.Spout>();	// Instantiate Spout script on main camera to prevent crash when exiting app
-		spoutCamera.AddComponent<Spout.SpoutSender>();
+		Spout.SpoutSender sender = spoutCamera.AddComponent<Spout.SpoutSender>();
 		spoutCamera.AddComponent<Spout.InvertCamera>();
 
 		// Setup spout components
-		spoutCamera.GetComponent<Spout.SpoutSender>().sharingName = Application.productName;
+		//sender.sharingName = Application.productName;
+		sender.sharingName = gameObject.name + " - " + System.IO.Path.GetFileNameWithoutExtension(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName); // same way as Syphon
 		// Create a new render texture
 		RenderTexture targetTexture = new RenderTexture(renderWidth, renderHeight, 24);
 		// Set it to the camera 
 		spoutCamera.GetComponent<Camera>().targetTexture = targetTexture;
 		// And set it to Spout
-		spoutCamera.GetComponent<Spout.SpoutSender>().texture = targetTexture;
+		sender.texture = targetTexture;
 	}
 
 	void ResizeSpoutRenderTexture(){
