@@ -83,10 +83,14 @@ public class SharedTextureClient : MonoBehaviour {
 		gameObject.AddComponent<Spout.Spout>();
 		Spout.SpoutReceiver client = gameObject.AddComponent<Spout.SpoutReceiver>();
 		// Init receiver
-		if (senderName == "") {
+		if (senderName == "" && senderAppName == "") {
 			client.sharingName = "Any";
+		} else if (senderName == "" && senderAppName != "") {
+			client.sharingName = senderAppName;
+		} else if (senderName != "" && senderAppName == "") {
+			client.sharingName = senderName;
 		} else {
-			client.sharingName = senderAppName + " - " + senderName;
+			client.sharingName = senderName + " - " + senderAppName;
 		}
 
 		// Apply shared texture 
