@@ -40,7 +40,20 @@ public class SharedTextureClient : MonoBehaviour {
 
 	void SetupGraphicClient(){
 		#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-		SetupSyphonClient();
+
+		// Check current Unity version
+		// < 5.3
+		if(float.Parse( Application.version.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
+			// Use Syphon (because have some issues on version >5.2 when writing this code)
+			SetupSyphonClient();
+		}
+		// >= 5.3
+		else{
+			// Use funnel, compatible with 5.3+ and latest OpenGL backend
+			Debug.LogError("Syphon client is not yet available on Unity 5.3+. Disabling it...");
+			this.enabled = false;
+		}
+
 		#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 		SetupSpoutClient();
 		#endif
