@@ -74,6 +74,11 @@ public class SharedTextureClient : MonoBehaviour {
 
 	#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 	void SetupSpoutClient(){
+		// Check Direct3D version
+		if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Direct3D11) {
+			Debug.LogWarning ("If you encounter any issue with Spout client (texture is not received), try to use Direct3D11 graphics API");
+		}
+
 		// Instantiate client
 		gameObject.AddComponent<Spout.Spout>();
 		Spout.SpoutReceiver client = gameObject.AddComponent<Spout.SpoutReceiver>();
@@ -94,7 +99,9 @@ public class SharedTextureClient : MonoBehaviour {
 		Spout.SpoutReceiver client = gameObject.GetComponent<Spout.SpoutReceiver> ();
 		// Apply shared texture 
 		foreach (Material mat in targetMaterials) {
-			mat.mainTexture = client.texture;
+			if (mat != null) {
+				mat.mainTexture = client.texture;
+			}
 		}
 	}
 
