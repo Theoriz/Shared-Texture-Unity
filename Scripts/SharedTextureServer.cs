@@ -103,19 +103,20 @@ public class SharedTextureServer : MonoBehaviour {
 
 		#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 		// Safety check to make sure that the syphon texture is reset correctly when changing window size
-		if(gameObject.GetComponent<Camera>().targetTexture == null){
-		switch(graphicServer){
-		case GraphicServer.SYPHON:
-		ResizeSyphonRenderTexture ();
-		break;
+		RenderTexture rt = gameObject.GetComponent<Camera>().targetTexture;
+		if(rt == null || (rt != null && (rt.width != renderWidth || rt.height != renderHeight) ) ){
+			switch(graphicServer){
+			case GraphicServer.SYPHON:
+				ResizeSyphonRenderTexture ();
+				break;
 
-		case GraphicServer.FUNNEL:
-		ResizeFunnelRenderTexture();
-		break;
+			case GraphicServer.FUNNEL:
+				ResizeFunnelRenderTexture();
+				break;
 
-		default:
-		break;
-		}
+			default:
+				break;
+			}
 		}
 		#endif
 
@@ -261,15 +262,15 @@ public class SharedTextureServer : MonoBehaviour {
 		// Apply changes to syphon server
 		switch(graphicServer){
 		case GraphicServer.SYPHON:
-		ResizeSyphonRenderTexture();
-		break;
+			ResizeSyphonRenderTexture();
+			break;
 
 		case GraphicServer.FUNNEL:
-		ResizeFunnelRenderTexture();
-		break;
+			ResizeFunnelRenderTexture();
+			break;
 
 		default:
-		break;
+			break;
 		}
 		#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 		// Apply changes to spout server
@@ -353,6 +354,7 @@ public class SharedTextureServer : MonoBehaviour {
 	void ResizeFunnelRenderTexture(){
 		gameObject.GetComponent<Funnel.Funnel> ().screenWidth = renderWidth;
 		gameObject.GetComponent<Funnel.Funnel> ().screenHeight = renderHeight;
+		gameObject.GetComponent<Funnel.Funnel> ().ApplyRenderTextureToCamera ();
 	}
 
 	IEnumerator DestroySyphonServer(){

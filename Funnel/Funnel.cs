@@ -225,6 +225,14 @@ namespace Funnel
             GUI.DrawTexture(rect, _renderTexture, ScaleMode.ScaleToFit, false);
         }
 
+		public void ApplyRenderTextureToCamera(){
+			var camera = GetComponent<Camera>();
+			// Make sure render texture on camera has not been released
+			if (camera.targetTexture == null) {
+				camera.targetTexture = _renderTexture;
+			}
+		}
+
         #endregion
     }
 }
