@@ -30,7 +30,7 @@ public class SyphonServerTextureCustomResolution : SyphonServerTexture {
 		cameraInstance = gameObject.GetComponent<Camera>();
 		if(cameraInstance != null && cameraInstance.enabled){
 			cameraInstance = GetComponent<Camera>();
-			cameraInstance.enabled = false;	
+			//cameraInstance.enabled = false;	
 		}
 
 		createOrResizeRenderTexture();

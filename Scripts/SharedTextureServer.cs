@@ -371,6 +371,9 @@ public class SharedTextureServer : MonoBehaviour {
 		syphonCam.targetTexture.Release ();
 		syphonCam.targetTexture = null;
 		syphonCam.enabled = true;
+		// Put back the original renderTexture to the camera if it had one before Syphon was added
+		// (because Syphon overrides the target texture on enable to put its own)
+		syphonCam.targetTexture = renderTexture;
 	}
 
 	void DestroyFunnelServer(){
