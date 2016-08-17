@@ -416,6 +416,9 @@ public class SharedTextureServer : MonoBehaviour {
 		gameObject.AddComponent<Spout.Spout>();	// Instantiate Spout script on main camera to prevent crash when exiting app
 		Spout.SpoutSender sender = spoutCamera.AddComponent<Spout.SpoutSender>();
 		spoutCamera.AddComponent<Spout.InvertCamera>();
+		// Add component to sync spout camera and UI camera (which are 2 different cameras, unlike Syphon)
+		SyncCamera sync = spoutCamera.AddComponent<SyncCamera>();
+		sync.refCam = GetComponent<Camera> ();
 
 		// Setup spout components
 		//sender.sharingName = Application.productName;
