@@ -25,6 +25,8 @@ public class SyncCamera : MonoBehaviour {
 			RenderTexture targetTexture = thisCam.targetTexture;
 			// Apply refCam parameters to this cam
 			thisCam.CopyFrom(refCam);
+			// HDR parameter does not seem to be copied with CopyFrom, so do it manually
+			thisCam.hdr = refCam.hdr;
 			// Put back target texture that may have been replaced by the one from refCam
 			thisCam.targetTexture = targetTexture;
 		}
