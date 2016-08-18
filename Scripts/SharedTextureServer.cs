@@ -202,26 +202,26 @@ public class SharedTextureServer : MonoBehaviour {
 			// Check current Unity version
 			// < 5.3
 			if(float.Parse( Application.version.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
-			// Use Syphon (because have some issues on version >5.2 when writing this code)
-			graphicServer = GraphicServer.SYPHON;
+				// Use Syphon (because have some issues on version >5.2 when writing this code)
+				graphicServer = GraphicServer.SYPHON;
 			}
 			// >= 5.3
 			else{
-			// Use funnel, compatible with 5.3+ and latest OpenGL backend
-			graphicServer = GraphicServer.FUNNEL;
+				// Use funnel, compatible with 5.3+ and latest OpenGL backend
+				graphicServer = GraphicServer.FUNNEL;
 			}
 
 			switch(graphicServer){
 			case GraphicServer.SYPHON:
-			SetupSyphonServer();
-			break;
+				SetupSyphonServer();
+				break;
 
 			case GraphicServer.FUNNEL:
-			SetupFunnelServer();
-			break;
+				SetupFunnelServer();
+				break;
 
 			default:
-			break;
+				break;
 			}
 
 			#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -234,26 +234,28 @@ public class SharedTextureServer : MonoBehaviour {
 	}
 
 	void DestroyGraphicServer(){
-		#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-		switch(graphicServer){
-		case GraphicServer.SYPHON:
-			StartCoroutine(DestroySyphonServer());
-			break;
-
-		case GraphicServer.FUNNEL:
-			DestroyFunnelServer();
-			break;
-
-		default:
-			break;
+		if(isSetup){
+			#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+			switch(graphicServer){
+			case GraphicServer.SYPHON:
+				StartCoroutine(DestroySyphonServer());
+				break;
+	
+			case GraphicServer.FUNNEL:
+				DestroyFunnelServer();
+				break;
+	
+			default:
+				break;
+			}
+	
+			#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+	
+			DestroySpoutServer();
+			#endif
+	
+			isSetup = false;
 		}
-
-		#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-
-		DestroySpoutServer();
-		#endif
-
-		isSetup = false;
 	}
 
 	void ResizeRenderTexture(){
