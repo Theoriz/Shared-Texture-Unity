@@ -338,11 +338,11 @@ public class SharedTextureServer : MonoBehaviour {
 		// Add funnel components
 		Funnel.Funnel server = gameObject.AddComponent<Funnel.Funnel>();
 		// Setup funnel component
-		#if UNITY_EDITOR
+		//#if UNITY_EDITOR
 		server.renderMode = Funnel.Funnel.RenderMode.PreviewOnGameView;
-		#else
-		server.renderMode = Funnel.Funnel.RenderMode.RenderToTarget;
-		#endif
+		//#else
+		//server.renderMode = Funnel.Funnel.RenderMode.RenderToTarget;
+		//#endif
 		server.screenWidth = renderWidth;
 		server.screenHeight = renderHeight;
 	}
