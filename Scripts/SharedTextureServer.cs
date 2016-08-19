@@ -287,19 +287,19 @@ public class SharedTextureServer : MonoBehaviour {
 			#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 			switch(graphicServer){
 			case GraphicServer.SYPHON:
-			gameObject.GetComponent<SyphonServerTextureCustomResolution> ().drawScene = true;
-			break;
+				gameObject.GetComponent<SyphonServerTextureCustomResolution> ().drawScene = true;
+				break;
 
 			case GraphicServer.FUNNEL:
-			#if UNITY_EDITOR
-			gameObject.GetComponent<Funnel.Funnel>().renderMode = Funnel.Funnel.RenderMode.PreviewOnGameView;
-			#else
-			gameObject.GetComponent<Funnel.Funnel>().renderMode = Funnel.Funnel.RenderMode.RenderToTarget;
-			#endif
-			break;
+				//#if UNITY_EDITOR
+				gameObject.GetComponent<Funnel.Funnel>().renderMode = Funnel.Funnel.RenderMode.PreviewOnGameView;
+				//#else
+				//gameObject.GetComponent<Funnel.Funnel>().renderMode = Funnel.Funnel.RenderMode.RenderToTarget;
+				//#endif
+				break;
 
 			default:
-			break;
+				break;
 			}
 			#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 			gameObject.GetComponent<Camera>().enabled = true;
