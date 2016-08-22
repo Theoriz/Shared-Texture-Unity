@@ -125,12 +125,12 @@ public class SharedTextureClient : MonoBehaviour {
 	#endif
 
 	void SaveSettings(){
-		string prefix = gameObject.name + GetType ().ToString ();
+		//string prefix = gameObject.name + GetType ().ToString ();
 
 	}
 
 	void LoadSettings(){
-		string prefix = gameObject.name + GetType ().ToString ();
+		//string prefix = gameObject.name + GetType ().ToString ();
 
 	}
 
