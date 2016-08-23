@@ -1,4 +1,6 @@
-﻿Shader "Projector/SyphonProjector MultiplyCG"
+﻿// Upgrade NOTE: replaced '_Projector' with 'unity_Projector'
+
+Shader "Projector/SyphonProjector MultiplyCG"
 
 { 
 
@@ -70,7 +72,7 @@ sampler2D _ShadowTex;
 
 float4 _Color;
 
-float4x4 _Projector;
+float4x4 unity_Projector;
 
  
 
@@ -82,7 +84,7 @@ v2f vert(appdata_tan v)
 
     o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 
-    o.uv_Main = mul (_Projector, v.vertex);
+    o.uv_Main = mul (unity_Projector, v.vertex);
 
     return o;
 
