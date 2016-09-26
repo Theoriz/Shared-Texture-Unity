@@ -111,7 +111,7 @@ using System.IO;
 		get{
 			
 		if(!safeMaterial){
-		safeMaterial = new Material (
+		/*safeMaterial = new Material (
 		"Shader \"Hidden/Invert\" {" +
 		"SubShader {" +
 		" Pass {" +
@@ -120,7 +120,9 @@ using System.IO;
 		" }" +
 		"}" +
 		"}"
-		);
+		);*/
+
+		safeMaterial = new Material (Shader.Find ("Hidden/Invert"));
 		safeMaterial.hideFlags = HideFlags.HideAndDontSave;
 		safeMaterial.shader.hideFlags = HideFlags.HideAndDontSave;		
 		}

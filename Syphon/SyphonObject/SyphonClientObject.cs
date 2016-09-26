@@ -226,9 +226,9 @@ public class SyphonClientObject : ScriptableObject {
 
 	public void Render(){
 				
-		if(attachedTexture.GetNativeTextureID() != cachedTexID){
-			cachedTexID = attachedTexture.GetNativeTextureID();
-			Syphon.CacheClientTextureValues(attachedTexture.GetNativeTextureID(), attachedTexture.width, attachedTexture.height, syphonClientPointer);
+		if(attachedTexture.GetNativeTexturePtr().ToInt32() != cachedTexID){
+			cachedTexID = attachedTexture.GetNativeTexturePtr().ToInt32(); //attachedTexture.GetNativeTextureID();
+			Syphon.CacheClientTextureValues(attachedTexture.GetNativeTexturePtr().ToInt32(), attachedTexture.width, attachedTexture.height, syphonClientPointer);
 			initialized = true;
 		}
 		

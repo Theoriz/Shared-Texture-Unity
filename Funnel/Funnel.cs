@@ -94,6 +94,8 @@ namespace Funnel
         Material gammaMaterial {
             get {
                 if (_gammaMaterial == null) {
+					if (_gammaShader == null)
+						_gammaShader = Shader.Find ("Hidden/Funnel/Gamma");
                     _gammaMaterial = new Material(_gammaShader);
                     _gammaMaterial.hideFlags = HideFlags.DontSave;
                 }

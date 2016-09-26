@@ -201,7 +201,7 @@ public class SharedTextureServer : MonoBehaviour {
 
 			// Check current Unity version
 			// < 5.3
-			if(float.Parse( Application.version.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
+			if(float.Parse( Application.unityVersion.Substring(0,3))<5.3){ //test the current Unity version. if it's oldest than 5.3 use syphon, else use funnel
 				// Use Syphon (because have some issues on version >5.2 when writing this code)
 				graphicServer = GraphicServer.SYPHON;
 			}
