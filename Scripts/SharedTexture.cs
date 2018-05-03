@@ -76,7 +76,7 @@ public class SharedTexture : MonoBehaviour
 
 #endif
 #if UNITY_EDITOR_MAC || UNITY_STANDALONE_OSX
-        this.gameObject.SetActive(false); 
+        this.gameObject.SetActive(false);
         funnel = gameObject.AddComponent<Funnel.Funnel>(); //to prevent awake method to execute before its variable initialization
 
         funnel.antiAliasing = antiAliasing;
