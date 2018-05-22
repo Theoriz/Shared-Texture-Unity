@@ -12,6 +12,7 @@ public class SharedTexture : MonoBehaviour
     private int TextureWidth, TextureHeight;
 
     [Header("Spout settings")]
+    public bool SpoutOutput;
     public string sharingName = "UnitySender";
 
     private RenderTexture texture;
