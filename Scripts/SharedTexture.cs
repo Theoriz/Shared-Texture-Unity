@@ -75,6 +75,8 @@ public class SharedTexture : MonoBehaviour
         spout.showTexture = showTexture;
         spout.forceBlackTexture = forceBlackTexture;
 
+        NewTextureSize(128,128);
+
 #endif
 #if UNITY_EDITOR_MAC || UNITY_STANDALONE_OSX
         this.gameObject.SetActive(false);
@@ -126,6 +128,7 @@ public class SharedTexture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!SpoutOutput) return;
         UpdateCamera();
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
