@@ -7,6 +7,7 @@ using UnityEngine;
 public class SharedTexture : MonoBehaviour
 {
     public Camera TargetCamera;
+    public bool UseCameraResolution;
     private Camera _myCam;
 
     private int TextureWidth, TextureHeight;
@@ -26,21 +27,29 @@ public class SharedTexture : MonoBehaviour
 
 
     [Header("Funnel settings")]
+    [HideInInspector]
     /// Anti-aliasing (MSAA) option
     public int antiAliasing = 1;
-
+    [HideInInspector]
     /// Discards alpha channel before sending
     public bool discardAlpha = true;
-
+    [HideInInspector]
     /// Determines how to handle the rendered screen
     public Funnel.Funnel.RenderMode renderMode;
 
 
     private SpoutCamSender spout;
     private Funnel.Funnel funnel;
+    private bool isSendingTexture; 
 
     public void NewTextureSize(int width, int height)
     {
+        if(UseCameraResolution)
+        {
+            width = TargetCamera.pixelWidth;
+            height = TargetCamera.pixelHeight;
+        }
+
         if (width != TextureWidth || height != TextureHeight)
         {
             enabled = false;
@@ -86,7 +95,10 @@ public class SharedTexture : MonoBehaviour
         funnel.discardAlpha = discardAlpha;
         funnel.renderMode = renderMode;
 #endif
+  
         this.gameObject.SetActive(true);
+        isSendingTexture = true;
+        this.enabled = SpoutOutput;
     }
 
     void OnDisable()
@@ -128,7 +140,17 @@ public class SharedTexture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!SpoutOutput) return;
+        if(!SpoutOutput && isSendingTexture)
+        {
+            OnDisable();
+            isSendingTexture = false;
+        }
+        if(SpoutOutput && !isSendingTexture)
+        {
+            OnEnable();
+            isSendingTexture = true;
+        }
+
         UpdateCamera();
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
