@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4229691300591652}
-  - component: {fileID: 114087296273535996}
   - component: {fileID: 20994847171343874}
+  - component: {fileID: 114087296273535996}
   m_Layer: 0
   m_Name: SharedTexture
   m_TagString: Untagged
@@ -34,13 +34,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1683651154888158}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.0968018, y: 1.6839936, z: 1.0641698}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20994847171343874
 Camera:
   m_ObjectHideFlags: 1
@@ -89,8 +89,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetCamera: {fileID: 0}
+  UseCameraResolution: 0
+  SpoutOutput: 0
   sharingName: UnitySender
   debugConsole: 0
+  showTexture: 0
+  forceBlackTexture: 0
   antiAliasing: 1
   discardAlpha: 1
   renderMode: 0

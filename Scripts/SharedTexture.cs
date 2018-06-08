@@ -8,12 +8,15 @@ public class SharedTexture : MonoBehaviour
 {
     public Camera TargetCamera;
     public bool UseCameraResolution;
+	public int outputWidth;
+	public int outputHeight;
+
     private Camera _myCam;
 
-    private int TextureWidth, TextureHeight;
+    private int currentWidth, currentHeight;
 
     [Header("Spout settings")]
-    public bool SpoutOutput;
+    public bool spoutOutput;
     public string sharingName = "UnitySender";
 
     private RenderTexture texture;
@@ -48,15 +51,19 @@ public class SharedTexture : MonoBehaviour
         {
             width = TargetCamera.pixelWidth;
             height = TargetCamera.pixelHeight;
+			outputHeight = height;
+			outputWidth = width;
         }
 
-        if (width != TextureWidth || height != TextureHeight)
+        if (width != currentWidth || height != currentHeight)
         {
             enabled = false;
             RenderTexture newText = new RenderTexture(width, height, 24);
-            TextureWidth = width;
-            TextureHeight = height;
-            GetComponent<Camera>().targetTexture = newText;
+			currentWidth = width;
+			currentHeight = height;
+			outputHeight = height;
+			outputWidth = width;
+			GetComponent<Camera>().targetTexture = newText;
             GetComponent<SpoutCamSender>().textureWidth = width;
             GetComponent<SpoutCamSender>().textureHeight = height;
             GetComponent<SpoutCamSender>().texture = newText;
@@ -84,7 +91,7 @@ public class SharedTexture : MonoBehaviour
         spout.showTexture = showTexture;
         spout.forceBlackTexture = forceBlackTexture;
 
-        NewTextureSize(128,128);
+        NewTextureSize(outputWidth, outputHeight);
 
 #endif
 #if UNITY_EDITOR_MAC || UNITY_STANDALONE_OSX
@@ -98,7 +105,7 @@ public class SharedTexture : MonoBehaviour
   
         this.gameObject.SetActive(true);
         isSendingTexture = true;
-        this.enabled = SpoutOutput;
+        this.enabled = spoutOutput;
     }
 
     void OnDisable()
@@ -140,12 +147,12 @@ public class SharedTexture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!SpoutOutput && isSendingTexture)
+        if(!spoutOutput && isSendingTexture)
         {
             OnDisable();
             isSendingTexture = false;
         }
-        if(SpoutOutput && !isSendingTexture)
+        if(spoutOutput && !isSendingTexture)
         {
             OnEnable();
             isSendingTexture = true;
