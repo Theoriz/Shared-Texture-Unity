@@ -16,7 +16,7 @@ public class SharedTexture : MonoBehaviour
     private int currentWidth, currentHeight;
 
     [Header("Spout settings")]
-    public bool spoutOutput;
+    public bool SpoutOutput;
     public string sharingName = "UnitySender";
 
     private RenderTexture texture;
@@ -105,7 +105,7 @@ public class SharedTexture : MonoBehaviour
   
         this.gameObject.SetActive(true);
         isSendingTexture = true;
-        this.enabled = spoutOutput;
+        this.enabled = SpoutOutput;
     }
 
     void OnDisable()
@@ -147,12 +147,12 @@ public class SharedTexture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!spoutOutput && isSendingTexture)
+        if(!SpoutOutput && isSendingTexture)
         {
             OnDisable();
             isSendingTexture = false;
         }
-        if(spoutOutput && !isSendingTexture)
+        if(SpoutOutput && !isSendingTexture)
         {
             OnEnable();
             isSendingTexture = true;
