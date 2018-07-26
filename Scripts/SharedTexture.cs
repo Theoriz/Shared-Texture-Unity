@@ -55,6 +55,9 @@ public class SharedTexture : MonoBehaviour
 			outputWidth = width;
         }
 
+        if (width == 0 || height == 0)
+            return;
+
         if (width != currentWidth || height != currentHeight)
         {
             enabled = false;
