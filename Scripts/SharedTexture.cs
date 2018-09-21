@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Spout;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
@@ -20,13 +19,6 @@ public class SharedTexture : MonoBehaviour
     public string sharingName = "UnitySender";
 
     private RenderTexture texture;
-    private RenderTexture blackTex;
-
-    private SpoutCamSender.TextureFormat textureFormat = SpoutCamSender.TextureFormat.DXGI_FORMAT_R8G8B8A8_UNORM;
-    public bool debugConsole = false;
-
-    public bool showTexture;
-    public bool forceBlackTexture;
 
 
     [Header("Funnel settings")]
@@ -40,8 +32,7 @@ public class SharedTexture : MonoBehaviour
     /// Determines how to handle the rendered screen
     public Funnel.Funnel.RenderMode renderMode;
 
-
-    private SpoutCamSender spout;
+    private Klak.Spout.SpoutSender spout;
     private Funnel.Funnel funnel;
     private bool isSendingTexture; 
 
@@ -67,9 +58,7 @@ public class SharedTexture : MonoBehaviour
 			outputHeight = height;
 			outputWidth = width;
 			GetComponent<Camera>().targetTexture = newText;
-            GetComponent<SpoutCamSender>().textureWidth = width;
-            GetComponent<SpoutCamSender>().textureHeight = height;
-            GetComponent<SpoutCamSender>().texture = newText;
+            GetComponent<Klak.Spout.SpoutSender>().sourceTexture = newText;
             texture = newText;
             enabled = true;
         }
@@ -78,21 +67,19 @@ public class SharedTexture : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        //Get the shared texture camera on this object
         _myCam = GetComponent<Camera>();
+
         if (!this.isActiveAndEnabled) return;
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
         this.gameObject.SetActive(false); //to prevent awake method to execute before its variable initialization
 
-        spout = gameObject.AddComponent<SpoutCamSender>();
+        spout = gameObject.AddComponent<Klak.Spout.SpoutSender>();
 
-        spout.sharingName = sharingName;
-        spout.blackTex = blackTex;
-        spout.texture = texture;
-        spout.textureFormat = textureFormat;
-        spout.debugConsole = debugConsole;
-        spout.showTexture = showTexture;
-        spout.forceBlackTexture = forceBlackTexture;
+        spout.useCamera = false;
+        spout.sourceTexture = texture;
+        spout.senderName = sharingName;
 
         NewTextureSize(outputWidth, outputHeight);
 
@@ -134,17 +121,8 @@ public class SharedTexture : MonoBehaviour
 
     void UpdateCamera()
     {
-        transform.position = TargetCamera.transform.position;
-        transform.rotation = TargetCamera.transform.rotation;
-        _myCam.farClipPlane = TargetCamera.farClipPlane;
-        _myCam.nearClipPlane = TargetCamera.nearClipPlane;
-        _myCam.orthographic = TargetCamera.orthographic;
-
-        _myCam.cullingMask = TargetCamera.cullingMask;
-        _myCam.backgroundColor = TargetCamera.backgroundColor;
-        _myCam.clearFlags = TargetCamera.clearFlags;
-        _myCam.renderingPath = TargetCamera.actualRenderingPath;
-        _myCam.projectionMatrix = TargetCamera.projectionMatrix;
+        _myCam.CopyFrom(TargetCamera);
+        _myCam.targetTexture = texture;
     }
 
     // Update is called once per frame
@@ -167,26 +145,8 @@ public class SharedTexture : MonoBehaviour
 
         if (spout == null) return;
 
-        if (spout.sharingName != sharingName)
-            spout.sharingName = sharingName;
-
-        if (spout.blackTex != blackTex)
-            spout.blackTex = blackTex;
-
-        if (spout.texture != texture)
-            spout.texture = texture;
-
-        if (spout.textureFormat != textureFormat)
-            spout.textureFormat = textureFormat;
-
-        if (spout.debugConsole != debugConsole)
-            spout.debugConsole = debugConsole;
-
-        if (spout.showTexture != showTexture)
-            spout.showTexture = showTexture;
-
-        if (spout.forceBlackTexture != forceBlackTexture)
-            spout.forceBlackTexture = forceBlackTexture;
+        if (spout.sourceTexture != texture)
+            spout.sourceTexture = texture;
 
 #endif
 #if UNITY_EDITOR_MAC || UNITY_STANDALONE_OSX
