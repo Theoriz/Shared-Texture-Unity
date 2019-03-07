@@ -19,27 +19,25 @@ namespace Klak.Spout
             set { _sourceTexture = value; }
         }
 
-        [SerializeField] String _senderName;
+		[SerializeField] String _senderName;
 
-        public String senderName
-        {
-            get { return _senderName; }
-            set { _senderName = value; }
-        }
+		public String senderName {
+			get { return _senderName; }
+			set { _senderName = value; }
+		}
 
-        #endregion
+		#endregion
 
-        #region Format options
+		#region Format options
 
-        [SerializeField] bool _useCamera;
+		[SerializeField] bool _useCamera;
 
-        public bool useCamera
-        {
-            get { return _useCamera; }
-            set { _useCamera = value; }
-        }
+		public bool useCamera {
+			get { return _useCamera; }
+			set { _useCamera = value; }
+		}
 
-        [SerializeField] bool _alphaSupport;
+		[SerializeField] bool _alphaSupport;
 
         public bool alphaSupport {
             get { return _alphaSupport; }
@@ -131,7 +129,7 @@ namespace Klak.Spout
 
             // Render texture mode update
             if (_useCamera && _sourceTexture != null)
-                    SendRenderTexture(_sourceTexture);
+                SendRenderTexture(_sourceTexture);
         }
 
         void OnRenderImage(RenderTexture source, RenderTexture destination)
