@@ -54,11 +54,22 @@ namespace Klak.Spout
 
         void SendRenderTexture(RenderTexture source)
         {
+
+			if (_plugin != System.IntPtr.Zero) {
+				//Destroy existing sender if its texture size does not match the source texture size
+				if (PluginEntry.GetTextureWidth(_plugin) != source.width || PluginEntry.GetTextureHeight(_plugin) != source.height) {
+					Util.IssuePluginEvent(PluginEntry.Event.Dispose, _plugin);
+					_plugin = System.IntPtr.Zero;
+
+					Util.Destroy(_sharedTexture);
+				}
+			}
+
             // Plugin lazy initialization
             if (_plugin == System.IntPtr.Zero)
             {
                 _plugin = PluginEntry.CreateSender(_senderName, source.width, source.height);
-                if (_plugin == System.IntPtr.Zero) return; // Spout may not be ready.
+				if (_plugin == System.IntPtr.Zero) return; // Spout may not be ready.
             }
 
             // Shared texture lazy initialization
@@ -73,7 +84,7 @@ namespace Klak.Spout
                         TextureFormat.ARGB32, false, false, ptr
                     );
                     _sharedTexture.hideFlags = HideFlags.DontSave;
-                }
+				}
             }
 
             // Shared texture update
@@ -98,7 +109,8 @@ namespace Klak.Spout
                 Graphics.Blit(source, tempRT, _blitMaterial, 0);
                 Graphics.CopyTexture(tempRT, _sharedTexture);
                 RenderTexture.ReleaseTemporary(tempRT);
-            }
+
+			}
         }
 
         #endregion
@@ -128,9 +140,9 @@ namespace Klak.Spout
                 Util.IssuePluginEvent(PluginEntry.Event.Update, _plugin);
 
             // Render texture mode update
-            if (_useCamera && _sourceTexture != null)
+            if (!_useCamera && _sourceTexture != null)
                 SendRenderTexture(_sourceTexture);
-        }
+		}
 
         void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
