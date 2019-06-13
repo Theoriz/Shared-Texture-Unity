@@ -38,7 +38,7 @@ public class SharedTexture : MonoBehaviour
 
     public void NewTextureSize(int width, int height)
     {
-        if(UseCameraResolution)
+        if (UseCameraResolution)
         {
             width = TargetCamera.pixelWidth;
             height = TargetCamera.pixelHeight;
@@ -51,6 +51,7 @@ public class SharedTexture : MonoBehaviour
 
         if (width != currentWidth || height != currentHeight)
         {
+            Debug.Log("New texture : " + width + "*" + height);
             enabled = false;
             RenderTexture newText = new RenderTexture(width, height, 24);
 			currentWidth = width;
@@ -92,7 +93,6 @@ public class SharedTexture : MonoBehaviour
         funnel.discardAlpha = discardAlpha;
         funnel.renderMode = renderMode;
 #endif
-  
         this.gameObject.SetActive(true);
         isSendingTexture = true;
         this.enabled = SpoutOutput;
@@ -140,6 +140,7 @@ public class SharedTexture : MonoBehaviour
         }
 
         UpdateCamera();
+        NewTextureSize(outputWidth, outputHeight) ;
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 
