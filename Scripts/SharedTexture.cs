@@ -51,7 +51,7 @@ public class SharedTexture : MonoBehaviour
 
         if (width != currentWidth || height != currentHeight)
         {
-            Debug.Log("New texture : " + width + "*" + height);
+            //Debug.Log("New texture : " + width + "*" + height);
             enabled = false;
             RenderTexture newText = new RenderTexture(width, height, 24);
 			currentWidth = width;
