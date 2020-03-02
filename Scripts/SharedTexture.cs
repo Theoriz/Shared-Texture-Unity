@@ -17,6 +17,7 @@ public class SharedTexture : MonoBehaviour
     [Header("Spout settings")]
     public bool SpoutOutput;
     public string sharingName = "UnitySender";
+    public bool alphaSupport = false;
 
     private RenderTexture texture;
 
@@ -81,6 +82,7 @@ public class SharedTexture : MonoBehaviour
         spout.useCamera = false;
         spout.sourceTexture = texture;
         spout.senderName = sharingName;
+        spout.alphaSupport = alphaSupport;
 
         NewTextureSize(outputWidth, outputHeight);
 
