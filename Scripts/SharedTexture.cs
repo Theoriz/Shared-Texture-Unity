@@ -151,6 +151,9 @@ public class SharedTexture : MonoBehaviour
         if (spout.sourceTexture != texture)
             spout.sourceTexture = texture;
 
+        if (spout.alphaSupport != alphaSupport)
+            spout.alphaSupport = alphaSupport;
+
 #endif
 #if UNITY_EDITOR_MAC || UNITY_STANDALONE_OSX
 
